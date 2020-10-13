@@ -13,11 +13,14 @@ import static seedu.resireg.testutil.Assert.assertThrows;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import seedu.resireg.commons.core.index.Index;
 import seedu.resireg.logic.commands.exceptions.CommandException;
 import seedu.resireg.model.AddressBook;
 import seedu.resireg.model.Model;
+import seedu.resireg.model.room.Room;
+import seedu.resireg.model.room.RoomNameContainsKeywordPairsPredicate;
 import seedu.resireg.model.student.NameContainsKeywordsPredicate;
 import seedu.resireg.model.student.Student;
 import seedu.resireg.testutil.EditStudentDescriptorBuilder;
@@ -140,6 +143,22 @@ public class CommandTestUtil {
         model.updateFilteredStudentList(new NameContainsKeywordsPredicate(Arrays.asList(splitName[0])));
 
         assertEquals(1, model.getFilteredStudentList().size());
+    }
+
+    /**
+     * Updates {@code model}'s filtered list to show only the room at the given {@code targetIndex} in the
+     * {@code model}'s address book.
+     */
+    public static void showRoomAtIndex(Model model, Index targetIndex) {
+        assertTrue(targetIndex.getZeroBased() < model.getFilteredRoomList().size());
+
+        Room room = model.getFilteredRoomList().get(targetIndex.getZeroBased());
+        final String[] info = new String[]{room.getFloor().value, room.getRoomNumber().value};
+        model.updateFilteredRoomList(
+                new RoomNameContainsKeywordPairsPredicate(Arrays.asList(Map.entry(info[0], info[1])))
+        );
+
+        assertEquals(1, model.getFilteredRoomList().size());
     }
 
 }
