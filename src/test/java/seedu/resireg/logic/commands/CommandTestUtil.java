@@ -117,6 +117,17 @@ public class CommandTestUtil {
 
     /**
      * Executes the given {@code command}, confirms that <br>
+     * - the returned {@link ToggleCommandResult} matches {@code expectedCommandResult} <br>
+     * - the {@code actualModel} matches {@code expectedModel}
+     */
+    public static void assertToggleCommandSuccess(Command command, Model actualModel, String expectedMessage,
+                                            Model expectedModel, TabView tabView) {
+        ToggleCommandResult expectedCommandResult = new ToggleCommandResult(expectedMessage, tabView);
+        assertCommandSuccess(command, actualModel, expectedCommandResult, expectedModel);
+    }
+
+    /**
+     * Executes the given {@code command}, confirms that <br>
      * - a {@code CommandException} is thrown <br>
      * - the CommandException message matches {@code expectedMessage} <br>
      * - the address book, filtered student list and selected student in {@code actualModel} remain unchanged

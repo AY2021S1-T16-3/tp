@@ -29,4 +29,6 @@ public class ToggleCommandResult extends CommandResult {
                 && other instanceof ToggleCommandResult
                 && tabView == ((ToggleCommandResult) other).tabView;
     }
+
 }
+

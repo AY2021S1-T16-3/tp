@@ -1,6 +1,6 @@
 package seedu.resireg.logic.commands;
 
-import static seedu.resireg.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.resireg.logic.commands.CommandTestUtil.assertToggleCommandSuccess;
 import static seedu.resireg.logic.commands.CommandTestUtil.showRoomAtIndex;
 import static seedu.resireg.testutil.TypicalIndexes.INDEX_FIRST_ROOM;
 import static seedu.resireg.testutil.TypicalRooms.getTypicalAddressBook;
@@ -14,6 +14,9 @@ import seedu.resireg.model.UserPrefs;
 
 public class ListRoomCommandTest {
 
+    private static final boolean SHOULD_DISPLAY = true;
+    private static final boolean SHOULD_NOT_DISPLAY = false;
+
     private Model model;
     private Model expectedModel;
 
@@ -25,12 +28,17 @@ public class ListRoomCommandTest {
 
     @Test
     public void execute_listIsNotFiltered_showsSameList() {
-        assertCommandSuccess(new ListRoomCommand(), model, ListRoomCommand.MESSAGE_SUCCESS, expectedModel);
+        assertToggleCommandSuccess(
+                new ListRoomCommand(SHOULD_NOT_DISPLAY),
+                model, ListRoomCommand.MESSAGE_SUCCESS, expectedModel, TabView.ROOMS);
     }
 
     @Test
     void execute_listIsFiltered_showsEverything() {
         showRoomAtIndex(model, INDEX_FIRST_ROOM);
-        assertCommandSuccess(new ListRoomCommand(), model, ListRoomCommand.MESSAGE_SUCCESS, expectedModel);
+        assertToggleCommandSuccess(
+                new ListRoomCommand(SHOULD_DISPLAY),
+                model,
+                ListRoomCommand.MESSAGE_VACANT_SUCCESS, expectedModel, TabView.ROOMS);
     }
 }
