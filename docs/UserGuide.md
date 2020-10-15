@@ -19,7 +19,7 @@ __ResiReg__ is optimised for OHS who are fast typists who are used to MS Excel, 
 - A Command Line Interface (CLI) which allows you to access all __ResiReg__ features by typing.
 - A Graphical User Interface (GUI) that displays the information you need in a grid format.
 
-> __ResiReg__ is currently a work in progress. Here is a low-fidelity mockup of its skeleton. Stay tuned for our progress!
+> __ResiReg__ is currently a work in progress. Here is a mockup of its skeleton. Stay tuned for our progress!
 ![](images/Ui.png)
 
 ## About this Guide
@@ -280,7 +280,7 @@ Just type in the `help` command!
 ## Command Summary
 Action   | Format, Examples
 ---------|--------------------
-*list rooms*    | `rooms [--allocated | --vacant]`
+*list rooms*    | `rooms [--allocated] [--vacant]`
 *allocate room* | `allocate si/<student_index> ri/<room_index>` e.g. `allocate si/1 ri/1`
 *deallocate room* | `deallocate si/<student_index> ri/<room_index>` e.g. `deallocate si/1 ri/1`
 *edit allocation* | `reallocate si/<student_index> ri/<room_index>` e.g. `reallocate si/1 ri/2`
