@@ -45,6 +45,7 @@ This section explains the format of commands in this User Guide.
 
 - Words in `<angular_brackets>` are the parameters to be supplied by the user e.g. in `deallocate <student_name>`, `<student_name>` is a parameter which can be used as `deallocate Jet New`.
 - Items in square brackets are optional e.g `<full_name> [-aka <alias>]` can be used as `Jet New -aka JJ` or as `Jet New`.
+- Items separated by <Code>|</Code> indicates a choice between items, but only one item is to be used at any time e.g. in `rooms --vacant` or `rooms --allocated`.
 - Items with … after them can be used multiple times including zero times, unless otherwise stated e.g. `[/m <mod> /ig <interest_group>]…` can be used as `/m mod /ig ig`, `/m mod1 /ig ig1 /m mod2 /ig ig2` etc.
 </div> 
 
@@ -280,7 +281,7 @@ Just type in the `help` command!
 ## Command Summary
 Action   | Format, Examples
 ---------|--------------------
-*list rooms*    | `rooms [--allocated] [--vacant]`
+*list rooms*    | <code>rooms [--allocated &#124; --vacant]</code>
 *allocate room* | `allocate si/<student_index> ri/<room_index>` e.g. `allocate si/1 ri/1`
 *deallocate room* | `deallocate si/<student_index> ri/<room_index>` e.g. `deallocate si/1 ri/1`
 *edit allocation* | `reallocate si/<student_index> ri/<room_index>` e.g. `reallocate si/1 ri/2`
