@@ -117,9 +117,7 @@ public class StudentBuilder {
      * Returns a new {@code Student} created.
      */
     public Student build() {
-        Student newStudent = new Student(name, phone, email, faculty, studentId, tags);
-        newStudent.setRoom(room);
-        return newStudent;
+        return new Student(name, phone, email, faculty, studentId, tags);
     }
 
 }

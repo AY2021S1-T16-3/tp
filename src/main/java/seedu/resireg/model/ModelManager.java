@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.resireg.commons.core.GuiSettings;
 import seedu.resireg.commons.core.LogsCenter;
+import seedu.resireg.model.allocation.Allocation;
 import seedu.resireg.model.room.Room;
 import seedu.resireg.model.student.Student;
 
@@ -24,6 +25,7 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Student> filteredStudents;
     private final FilteredList<Room> filteredRooms;
+    private final FilteredList<Allocation> filteredAllocations;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -38,6 +40,7 @@ public class ModelManager implements Model {
         this.userPrefs = new UserPrefs(userPrefs);
         filteredStudents = new FilteredList<>(versionedResiReg.getStudentList());
         filteredRooms = new FilteredList<>(versionedResiReg.getRoomList());
+        filteredAllocations = new FilteredList<>(versionedResiReg.getAllocationList());
     }
 
     public ModelManager() {
@@ -104,6 +107,7 @@ public class ModelManager implements Model {
 
     @Override
     public void addStudent(Student student) {
+        requireNonNull(student);
         versionedResiReg.addStudent(student);
         updateFilteredStudentList(PREDICATE_SHOW_ALL_PERSONS);
     }
@@ -111,14 +115,27 @@ public class ModelManager implements Model {
     @Override
     public void setStudent(Student target, Student editedStudent) {
         requireAllNonNull(target, editedStudent);
-
         versionedResiReg.setStudent(target, editedStudent);
+    }
+
+    @Override
+    public boolean isAllocated(Student student) {
+        requireNonNull(student);
+        return versionedResiReg.isAllocated(student);
+    }
+
+    /**
+     * Returns true if an allocation relating to {@code room} exists in the address book.
+     */
+    @Override
+    public boolean isAllocated(Room room) {
+        requireNonNull(room);
+        return versionedResiReg.isAllocated(room);
     }
 
     @Override
     public void setRoom(Room target, Room editedRoom) {
         requireAllNonNull(target, editedRoom);
-
         versionedResiReg.setRoom(target, editedRoom);
     }
 
@@ -126,6 +143,30 @@ public class ModelManager implements Model {
     public boolean hasRoom(Room room) {
         requireNonNull(room);
         return versionedResiReg.hasRoom(room);
+    }
+
+    @Override
+    public boolean hasAllocation(Allocation allocation) {
+        requireNonNull(allocation);
+        return versionedResiReg.hasAllocation(allocation);
+    }
+
+    @Override
+    public void removeAllocation(Allocation target) {
+        requireNonNull(target);
+        versionedResiReg.removeAllocation(target);
+    }
+
+    @Override
+    public void addAllocation(Allocation allocation) {
+        requireNonNull(allocation);
+        versionedResiReg.addAllocation(allocation);
+    }
+
+    @Override
+    public void setAllocation(Allocation target, Allocation editedAllocation) {
+        requireAllNonNull(target, editedAllocation);
+        versionedResiReg.setAllocation(target, editedAllocation);
     }
 
     //=========== Filtered Student List Accessors =============================================================
@@ -157,9 +198,20 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public ObservableList<Allocation> getFilteredAllocationList() {
+        return filteredAllocations;
+    }
+
+    @Override
     public void updateFilteredRoomList(Predicate<Room> predicate) {
         requireNonNull(predicate);
         filteredRooms.setPredicate(predicate);
+    }
+
+    @Override
+    public void updateFilteredAllocationList(Predicate<Allocation> predicate) {
+        requireNonNull(predicate);
+        filteredAllocations.setPredicate(predicate);
     }
 
     //=========== Undo/Redo =============================================================

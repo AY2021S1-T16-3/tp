@@ -10,6 +10,7 @@ import seedu.resireg.commons.core.Messages;
 import seedu.resireg.commons.core.index.Index;
 import seedu.resireg.logic.commands.exceptions.CommandException;
 import seedu.resireg.model.Model;
+import seedu.resireg.model.allocation.Allocation;
 import seedu.resireg.model.room.Room;
 import seedu.resireg.model.student.Student;
 
@@ -52,6 +53,7 @@ public class ReallocateCommand extends Command {
         requireNonNull(model);
         List<Student> lastShownListStudent = model.getFilteredStudentList();
         List<Room> lastShownListRoom = model.getFilteredRoomList();
+        List<Allocation> lastShownListAllocation = model.getFilteredAllocationList();
 
         if (studentIndex.getZeroBased() >= lastShownListStudent.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
@@ -62,25 +64,28 @@ public class ReallocateCommand extends Command {
         Student studentToReallocate = lastShownListStudent.get(studentIndex.getZeroBased());
         Room roomToReallocate = lastShownListRoom.get(roomIndex.getZeroBased());
 
+        Allocation toReallocate = null;
+        for (Allocation allocation : lastShownListAllocation) {
+            if (studentToReallocate.getStudentId().equals(allocation.getStudentId())) {
+                toReallocate = allocation;
+            }
+        }
+
         if (!model.hasStudent(studentToReallocate)) {
             throw new CommandException(MESSAGE_STUDENT_NOT_FOUND);
         } else if (!model.hasRoom(roomToReallocate)) {
             throw new CommandException(MESSAGE_ROOM_NOT_FOUND);
-        } else if (!studentToReallocate.hasRoom()) {
+        } else if (toReallocate == null) {
             throw new CommandException(MESSAGE_STUDENT_NOT_ALLOCATED);
-        } else if (roomToReallocate.hasStudent()) {
-            throw new CommandException(MESSAGE_ROOM_ALREADY_ALLOCATED);
         }
 
-        studentToReallocate.getRoom().unsetStudent();
-        studentToReallocate.setRoom(roomToReallocate);
-        roomToReallocate.setStudent(studentToReallocate);
-
-        model.setStudent(studentToReallocate, studentToReallocate);
-        model.setRoom(roomToReallocate, roomToReallocate);
+        Allocation editedAllocation = new Allocation(roomToReallocate.getFloor(), roomToReallocate.getRoomNumber(),
+                        studentToReallocate.getStudentId());
+        model.setAllocation(toReallocate, editedAllocation);
 
         model.updateFilteredStudentList(Model.PREDICATE_SHOW_ALL_PERSONS);
         model.updateFilteredRoomList(Model.PREDICATE_SHOW_ALL_ROOMS);
+        model.updateFilteredAllocationList(Model.PREDICATE_SHOW_ALL_ALLOCATIONS);
 
         model.saveStateResiReg();
 

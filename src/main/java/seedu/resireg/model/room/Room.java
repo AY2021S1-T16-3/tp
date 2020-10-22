@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import seedu.resireg.model.room.roomtype.RoomType;
-import seedu.resireg.model.student.Student;
 import seedu.resireg.model.tag.Tag;
 
 /**
@@ -24,7 +23,6 @@ public class Room {
 
     // Data fields
     private final Set<Tag> tags = new HashSet<>();
-    private Student student;
 
     /**
      * Every field must be present and not null.
@@ -36,7 +34,6 @@ public class Room {
         this.number = number;
         this.roomType = roomType;
         this.tags.addAll(tags);
-        this.student = null; // defensive check
     }
 
     public Floor getFloor() {
@@ -55,41 +52,12 @@ public class Room {
         return getFloor() + ":" + getRoomNumber();
     }
 
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        if (student == null) {
-            return;
-        }
-
-        if (student.hasRoom() && !student.getRoom().isSameRoom(this)) {
-            student.unsetRoom();
-        }
-        this.student = student;
-    }
-
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
      */
     public Set<Tag> getTags() {
         return Collections.unmodifiableSet(tags);
-    }
-
-    /**
-     * @return true if a Student has been allocated to this room, otherwise false
-     */
-    public boolean hasStudent() {
-        return getStudent() != null;
-    }
-
-    /**
-     * Deallocates the Student currently assigned to this Room.
-     */
-    public void unsetStudent() {
-        student = null;
     }
 
     /**
@@ -124,8 +92,7 @@ public class Room {
         return otherRoom.getFloor().equals(getFloor())
                 && otherRoom.getRoomNumber().equals(getRoomNumber())
                 && otherRoom.getRoomType().equals(getRoomType())
-                && otherRoom.getTags().equals(getTags())
-                && Objects.equals(otherRoom.getStudent(), getStudent());
+                && otherRoom.getTags().equals(getTags());
     }
 
     @Override

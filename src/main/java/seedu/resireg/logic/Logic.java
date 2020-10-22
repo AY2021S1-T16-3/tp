@@ -8,6 +8,7 @@ import seedu.resireg.logic.commands.CommandResult;
 import seedu.resireg.logic.commands.exceptions.CommandException;
 import seedu.resireg.logic.parser.exceptions.ParseException;
 import seedu.resireg.model.ReadOnlyAddressBook;
+import seedu.resireg.model.allocation.Allocation;
 import seedu.resireg.model.room.Room;
 import seedu.resireg.model.student.Student;
 
@@ -36,6 +37,9 @@ public interface Logic {
 
     /** Returns an unmodifiable view of the filtered list of rooms */
     ObservableList<Room> getFilteredRoomList();
+
+    /** Returns an unmodifiable view of the filtered list of allocations */
+    ObservableList<Allocation> getFilteredAllocationList();
 
     /**
      * Returns the user prefs' address book file path.

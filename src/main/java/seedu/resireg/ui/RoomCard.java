@@ -8,6 +8,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.resireg.model.room.Room;
+import seedu.resireg.model.student.Name;
+import seedu.resireg.model.student.StudentId;
 
 public class RoomCard extends UiPart<Region> {
     private static final String FXML = "RoomListCard.fxml";
@@ -47,17 +49,30 @@ public class RoomCard extends UiPart<Region> {
         id.setText(displayedIndex + ". ");
         roomLabel.setText(room.getFloor() + "-" + room.getRoomNumber());
         roomType.setText(room.getRoomType().toString());
-        if (room.hasStudent()) {
-            studentId.setText(room.getStudent().getStudentId().value);
-            studentName.setText(room.getStudent().getName().fullName);
-        } else {
-            studentId.setText("Unallocated");
-            studentName.setText("Unallocated");
-        }
+        studentId.setText("Unallocated");
+        studentName.setText("Unallocated");
         room.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
     }
+
+    /**
+     * Creates a {@code RoomCard} with the given {@code Room} and index to display.
+     * Includes the {@code studentId} and {@code studentName}.
+     */
+    public RoomCard(Room room, int displayedIndex, StudentId studentId, Name name) {
+        super(FXML);
+        this.room = room;
+        id.setText(displayedIndex + ". ");
+        roomLabel.setText(room.getFloor() + "-" + room.getRoomNumber());
+        roomType.setText(room.getRoomType().toString());
+        this.studentId.setText(studentId.toString());
+        this.studentName.setText(name.toString());
+        room.getTags().stream()
+                .sorted(Comparator.comparing(tag -> tag.tagName))
+                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+    }
+
 
     @Override
     public boolean equals(Object other) {

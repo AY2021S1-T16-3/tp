@@ -55,5 +55,6 @@
     "studentId": "E0111101",
     "tagged" : [ ]
   } ],
-  "rooms": [ ]
+  "rooms": [ ],
+  "allocations": []
 }

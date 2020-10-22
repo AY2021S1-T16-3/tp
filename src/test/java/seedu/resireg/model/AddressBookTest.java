@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import seedu.resireg.model.allocation.Allocation;
 import seedu.resireg.model.room.Room;
 import seedu.resireg.model.student.Student;
 import seedu.resireg.model.student.exceptions.DuplicateStudentException;
@@ -90,6 +91,7 @@ public class AddressBookTest {
     private static class AddressBookStub implements ReadOnlyAddressBook {
         private final ObservableList<Student> students = FXCollections.observableArrayList();
         private final ObservableList<Room> rooms = FXCollections.observableArrayList();
+        private final ObservableList<Allocation> allocations = FXCollections.observableArrayList();
 
         AddressBookStub(Collection<Student> students) {
             this.students.setAll(students); // todo: set rooms
@@ -103,6 +105,11 @@ public class AddressBookTest {
         @Override
         public ObservableList<Room> getRoomList() {
             return rooms;
+        }
+
+        @Override
+        public ObservableList<Allocation> getAllocationList() {
+            return allocations;
         }
     }
 

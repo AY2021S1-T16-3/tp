@@ -7,10 +7,9 @@ import java.util.List;
 
 import seedu.resireg.commons.core.Messages;
 import seedu.resireg.commons.core.index.Index;
-import seedu.resireg.logic.CreateEditCopy;
 import seedu.resireg.logic.commands.exceptions.CommandException;
 import seedu.resireg.model.Model;
-import seedu.resireg.model.room.Room;
+import seedu.resireg.model.allocation.Allocation;
 import seedu.resireg.model.student.Student;
 
 
@@ -44,36 +43,38 @@ public class DeallocateCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         List<Student> lastShownListStudent = model.getFilteredStudentList();
+        List<Allocation> lastShownListAllocation = model.getFilteredAllocationList();
 
         if (studentIndex.getZeroBased() >= lastShownListStudent.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         Student studentToDeallocate = lastShownListStudent.get(studentIndex.getZeroBased());
-        Room roomToDeallocate = studentToDeallocate.getRoom();
+
+        Allocation toDeallocate = null;
+        for (Allocation allocation : lastShownListAllocation) {
+            if (studentToDeallocate.getStudentId().equals(allocation.getStudentId())) {
+                toDeallocate = allocation;
+            }
+        }
 
         if (!model.hasStudent(studentToDeallocate)) {
             throw new CommandException(MESSAGE_STUDENT_NOT_FOUND);
-        } else if (roomToDeallocate == null) {
+        } else if (toDeallocate == null) {
             throw new CommandException(MESSAGE_STUDENT_NOT_ALLOCATED);
         }
 
-        Student studentToEdit = CreateEditCopy.createCopiedStudent(studentToDeallocate);
-        Room roomToEdit = CreateEditCopy.createCopiedRoom(roomToDeallocate);
-
-        studentToEdit.unsetRoom();
-        roomToEdit.unsetStudent();
-
-        model.setStudent(studentToDeallocate, studentToEdit);
-        model.setRoom(roomToDeallocate, roomToEdit);
+        model.removeAllocation(toDeallocate);
 
         model.updateFilteredStudentList(Model.PREDICATE_SHOW_ALL_PERSONS);
         model.updateFilteredRoomList(Model.PREDICATE_SHOW_ALL_ROOMS);
+        model.updateFilteredAllocationList(Model.PREDICATE_SHOW_ALL_ALLOCATIONS);
 
         model.saveStateResiReg();
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, roomToDeallocate.getRoomLabel(),
-            studentToDeallocate.getName().fullName));
+        return new CommandResult(String.format(MESSAGE_SUCCESS,
+                toDeallocate.getFloor().toString() + ':' + toDeallocate.getRoomNumber(),
+                studentToDeallocate.getName().fullName));
     }
 
     @Override

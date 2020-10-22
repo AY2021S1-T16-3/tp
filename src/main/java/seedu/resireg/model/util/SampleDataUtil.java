@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import seedu.resireg.model.AddressBook;
 import seedu.resireg.model.ReadOnlyAddressBook;
+import seedu.resireg.model.allocation.Allocation;
 import seedu.resireg.model.room.Floor;
 import seedu.resireg.model.room.Room;
 import seedu.resireg.model.room.RoomNumber;
@@ -60,6 +61,12 @@ public class SampleDataUtil {
         };
     }
 
+    public static Allocation[] getSampleAllocations() {
+        return new Allocation[] {
+            new Allocation(new Floor("11"), new RoomNumber("108"), new StudentId("E0111111"))
+        };
+    }
+
     public static ReadOnlyAddressBook getSampleAddressBook() {
         AddressBook sampleAb = new AddressBook();
         for (Student sampleStudent : getSampleStudents()) {
@@ -67,6 +74,9 @@ public class SampleDataUtil {
         }
         for (Room sampleRoom : getSampleRooms()) {
             sampleAb.addRoom(sampleRoom);
+        }
+        for (Allocation sampleAllocation : getSampleAllocations()) {
+            sampleAb.addAllocation(sampleAllocation);
         }
         return sampleAb;
     }
@@ -79,5 +89,4 @@ public class SampleDataUtil {
                 .map(Tag::new)
                 .collect(Collectors.toSet());
     }
-
 }

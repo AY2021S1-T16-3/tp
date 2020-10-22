@@ -20,6 +20,7 @@ import seedu.resireg.model.AddressBook;
 import seedu.resireg.model.Model;
 import seedu.resireg.model.ReadOnlyAddressBook;
 import seedu.resireg.model.ReadOnlyUserPrefs;
+import seedu.resireg.model.allocation.Allocation;
 import seedu.resireg.model.room.Room;
 import seedu.resireg.model.student.Student;
 import seedu.resireg.testutil.StudentBuilder;
@@ -141,6 +142,16 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean isAllocated(Student student) {
+            return false;
+        }
+
+        @Override
+        public boolean isAllocated(Room room) {
+            return false;
+        }
+
+        @Override
         public void setRoom(Room target, Room editedRoom) {
             throw new AssertionError("This method should not be called.");
         }
@@ -148,6 +159,26 @@ public class AddCommandTest {
         @Override
         public boolean hasRoom(Room room) {
             throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasAllocation(Allocation allocation) {
+            return false;
+        }
+
+        @Override
+        public void removeAllocation(Allocation target) {
+
+        }
+
+        @Override
+        public void addAllocation(Allocation allocation) {
+
+        }
+
+        @Override
+        public void setAllocation(Allocation target, Allocation editedAllocation) {
+
         }
 
         @Override
@@ -161,6 +192,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public ObservableList<Allocation> getFilteredAllocationList() {
+            return null;
+        }
+
+        @Override
         public void updateFilteredStudentList(Predicate<Student> predicate) {
             throw new AssertionError("This method should not be called.");
         }
@@ -168,6 +204,11 @@ public class AddCommandTest {
         @Override
         public void updateFilteredRoomList(Predicate<Room> predicate) {
             throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void updateFilteredAllocationList(Predicate<Allocation> predicate) {
+
         }
 
         @Override

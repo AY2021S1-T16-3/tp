@@ -3,8 +3,11 @@ package seedu.resireg.model;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.Objects;
 
 import javafx.collections.ObservableList;
+import seedu.resireg.model.allocation.Allocation;
+import seedu.resireg.model.allocation.UniqueAllocationList;
 import seedu.resireg.model.room.Room;
 import seedu.resireg.model.room.UniqueRoomList;
 import seedu.resireg.model.student.Student;
@@ -18,6 +21,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniqueStudentList students;
     private final UniqueRoomList rooms;
+    private final UniqueAllocationList allocations;
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -29,6 +33,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     {
         students = new UniqueStudentList();
         rooms = new UniqueRoomList();
+        allocations = new UniqueAllocationList();
     }
 
     public AddressBook() {}
@@ -59,6 +64,13 @@ public class AddressBook implements ReadOnlyAddressBook {
         this.rooms.setRooms(rooms);
     }
 
+    /**
+     * Replaces the contents of the room list with {@code rooms}.
+     * {@code rooms} must not contain duplicate rooms
+     */
+    public void setAllocations(List<Allocation> allocations) {
+        this.allocations.setAllocations(allocations);
+    }
 
     /**
      * Resets the existing data of this {@code AddressBook} with {@code newData}.
@@ -68,6 +80,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
         setStudents(newData.getStudentList());
         setRooms(newData.getRoomList());
+        setAllocations(newData.getAllocationList());
     }
 
     //// student-level operations
@@ -96,7 +109,6 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void setStudent(Student target, Student editedStudent) {
         requireNonNull(editedStudent);
-
         students.setStudent(target, editedStudent);
     }
 
@@ -107,6 +119,23 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void removeStudent(Student key) {
         students.remove(key);
     }
+
+    /**
+     * Returns true if an allocation relating to {@code student} exists in the address book.
+     */
+    public boolean isAllocated(Student student) {
+        requireNonNull(student);
+        return allocations.contains(student);
+    }
+
+    /**
+     * Returns true if an allocation relating to {@code room} exists in the address book.
+     */
+    public boolean isAllocated(Room room) {
+        requireNonNull(room);
+        return allocations.contains(room);
+    }
+
 
     //// room-level operations
 
@@ -145,6 +174,44 @@ public class AddressBook implements ReadOnlyAddressBook {
         rooms.remove(key);
     }
 
+    //// allocation-level operations
+
+    /**
+     * Adds an allocation to the address book.
+     * The allocation must not already exist in the address book.
+     */
+    public void addAllocation(Allocation allocation) {
+        requireNonNull(allocation);
+        allocations.add(allocation);
+    }
+
+    /**
+     * Returns true if an allocation with the same identity as {@code allocation} exists in the address book.
+     */
+    public boolean hasAllocation(Allocation allocation) {
+        requireNonNull(allocation);
+        return allocations.contains(allocation);
+    }
+
+    /**
+     * Replaces the given allocation {@code target} in the list with {@code editedAllocation}.
+     * {@code target} must exist in the address book.
+     * The allocation identity of {@code editedALlocation} must not be the same as another existing allocation
+     * in the address book.
+     */
+    public void setAllocation(Allocation target, Allocation editedAllocation) {
+        requireNonNull(editedAllocation);
+        allocations.setAllocation(target, editedAllocation);
+    }
+
+    /**
+     * Removes {@code key} from this {@code AddressBook}.
+     * {@code key} must exist in the address book.
+     */
+    public void removeAllocation(Allocation key) {
+        allocations.remove(key);
+    }
+
     //// util methods
 
     @Override
@@ -164,15 +231,21 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     @Override
+    public ObservableList<Allocation> getAllocationList() {
+        return allocations.asUnmodifiableObservableList();
+    }
+
+    @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof AddressBook // instanceof handles nulls
                 && students.equals(((AddressBook) other).students)
-                && rooms.equals(((AddressBook) other).rooms));
+                && rooms.equals(((AddressBook) other).rooms)
+                && allocations.equals(((AddressBook) other).allocations));
     }
 
     @Override
     public int hashCode() {
-        return students.hashCode();
+        return Objects.hash(students, rooms, allocations);
     }
 }

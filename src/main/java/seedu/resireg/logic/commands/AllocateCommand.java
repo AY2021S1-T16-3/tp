@@ -11,6 +11,7 @@ import seedu.resireg.commons.core.index.Index;
 import seedu.resireg.logic.CreateEditCopy;
 import seedu.resireg.logic.commands.exceptions.CommandException;
 import seedu.resireg.model.Model;
+import seedu.resireg.model.allocation.Allocation;
 import seedu.resireg.model.room.Room;
 import seedu.resireg.model.student.Student;
 
@@ -33,8 +34,7 @@ public class AllocateCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Room %1$s allocated to %2$s.";
     public static final String MESSAGE_ROOM_NOT_FOUND = "This room does not exist in ResiReg";
     public static final String MESSAGE_STUDENT_NOT_FOUND = "This student is not registered in ResiReg";
-    public static final String MESSAGE_STUDENT_ALREADY_ALLOCATED = "This student has already been allocated a room.";
-    public static final String MESSAGE_ROOM_ALREADY_ALLOCATED = "This room has already been allocated to a student.";
+    public static final String MESSAGE_ALLOCATION_EXISTS = "This allocation has already been registered in ResiReg.";
 
     private final Index studentIndex;
     private final Index roomIndex;
@@ -66,28 +66,27 @@ public class AllocateCommand extends Command {
 
         Student studentToAllocate = lastShownListStudent.get(studentIndex.getZeroBased());
         Room roomToAllocate = lastShownListRoom.get(roomIndex.getZeroBased());
+        Allocation toAllocate = new Allocation(roomToAllocate.getFloor(),
+                roomToAllocate.getRoomNumber(), studentToAllocate.getStudentId());
 
         if (!model.hasStudent(studentToAllocate)) {
             throw new CommandException(MESSAGE_STUDENT_NOT_FOUND);
         } else if (!model.hasRoom(roomToAllocate)) {
             throw new CommandException(MESSAGE_ROOM_NOT_FOUND);
-        } else if (studentToAllocate.hasRoom()) {
-            throw new CommandException(MESSAGE_STUDENT_ALREADY_ALLOCATED);
-        } else if (roomToAllocate.hasStudent()) {
-            throw new CommandException(MESSAGE_ROOM_ALREADY_ALLOCATED);
+        } else if (model.hasAllocation(toAllocate)) {
+            throw new CommandException(MESSAGE_ALLOCATION_EXISTS);
         }
 
         Student studentToEdit = CreateEditCopy.createCopiedStudent(studentToAllocate);
         Room roomToEdit = CreateEditCopy.createCopiedRoom(roomToAllocate);
 
-        studentToEdit.setRoom(roomToEdit);
-        roomToEdit.setStudent(studentToEdit);
-
         model.setStudent(studentToAllocate, studentToEdit);
         model.setRoom(roomToAllocate, roomToEdit);
+        model.addAllocation(toAllocate);
 
         model.updateFilteredStudentList(Model.PREDICATE_SHOW_ALL_PERSONS);
         model.updateFilteredRoomList(Model.PREDICATE_SHOW_ALL_ROOMS);
+        model.updateFilteredAllocationList(Model.PREDICATE_SHOW_ALL_ALLOCATIONS);
 
         model.saveStateResiReg();
 
@@ -102,5 +101,4 @@ public class AllocateCommand extends Command {
                 && studentIndex.equals(((AllocateCommand) other).studentIndex)
                 && roomIndex.equals(((AllocateCommand) other).roomIndex));
     }
-
 }

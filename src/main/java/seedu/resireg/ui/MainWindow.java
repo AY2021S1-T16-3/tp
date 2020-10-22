@@ -127,13 +127,7 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        studentListPanel = new StudentListPanel(logic.getFilteredStudentList());
-        studentListPanelPlaceholder.getChildren()
-                .add(studentListPanel.getRoot());
-
-        roomListPanel = new RoomListPanel(logic.getFilteredRoomList());
-        roomListPanelPlaceholder.getChildren()
-                .add(roomListPanel.getRoot());
+        updatePanels();
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
@@ -232,11 +226,32 @@ public class MainWindow extends UiPart<Stage> {
                 handleExit();
             }
 
+            updatePanels();
+
             return commandResult;
         } catch (CommandException | ParseException e) {
             logger.info("Invalid command: " + commandText);
             resultDisplay.setFeedbackToUser(commandText, e.getMessage(), true);
             throw e;
         }
+    }
+
+    /**
+     * Updates the panels for Student and Room lists for changes visually.
+     */
+    private void updatePanels() {
+        studentListPanel = new StudentListPanel(
+                logic.getFilteredStudentList(),
+                logic.getFilteredAllocationList(),
+                logic.getFilteredRoomList());
+        studentListPanelPlaceholder.getChildren()
+                .add(studentListPanel.getRoot());
+
+        roomListPanel = new RoomListPanel(
+                logic.getFilteredRoomList(),
+                logic.getFilteredAllocationList(),
+                logic.getFilteredStudentList());
+        roomListPanelPlaceholder.getChildren()
+                .add(roomListPanel.getRoot());
     }
 }

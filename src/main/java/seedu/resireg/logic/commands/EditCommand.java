@@ -7,6 +7,7 @@ import static seedu.resireg.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.resireg.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.resireg.logic.parser.CliSyntax.PREFIX_STUDENT_ID;
 import static seedu.resireg.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.resireg.model.Model.PREDICATE_SHOW_ALL_ALLOCATIONS;
 import static seedu.resireg.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.Collections;
@@ -20,6 +21,7 @@ import seedu.resireg.commons.core.index.Index;
 import seedu.resireg.commons.util.CollectionUtil;
 import seedu.resireg.logic.commands.exceptions.CommandException;
 import seedu.resireg.model.Model;
+import seedu.resireg.model.allocation.Allocation;
 import seedu.resireg.model.student.Email;
 import seedu.resireg.model.student.Name;
 import seedu.resireg.model.student.Phone;
@@ -72,6 +74,7 @@ public class EditCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         List<Student> lastShownList = model.getFilteredStudentList();
+        List<Allocation> lastShownAllocationList = model.getFilteredAllocationList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
@@ -82,6 +85,18 @@ public class EditCommand extends Command {
 
         if (!studentToEdit.isSameStudent(editedStudent) && model.hasStudent(editedStudent)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        }
+
+        if (model.isAllocated(studentToEdit)) {
+            for (Allocation allocation : lastShownAllocationList) {
+                if (allocation.isRelatedTo(studentToEdit)) {
+                    Allocation editedAllocation = new Allocation(allocation.getFloor(),
+                            allocation.getRoomNumber(),
+                            editedStudent.getStudentId());
+                    model.setAllocation(allocation, editedAllocation);
+                    model.updateFilteredAllocationList(PREDICATE_SHOW_ALL_ALLOCATIONS);
+                }
+            }
         }
 
         model.setStudent(studentToEdit, editedStudent);

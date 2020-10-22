@@ -7,6 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import seedu.resireg.model.room.Floor;
+import seedu.resireg.model.room.RoomNumber;
 import seedu.resireg.model.student.Student;
 
 /**
@@ -60,13 +62,27 @@ public class StudentCard extends UiPart<Region> {
         faculty.setText(student.getFaculty().value);
         studentId.setText(student.getStudentId().value);
         email.setText(student.getEmail().value);
-        if (student.hasRoom()) {
-            floor.setText(student.getRoom().getFloor().value);
-            roomNumber.setText(student.getRoom().getRoomNumber().value);
-        } else {
-            floor.setText("Unallocated");
-            roomNumber.setText("Unallocated");
-        }
+        floor.setText("Unallocated");
+        roomNumber.setText("Unallocated");
+        student.getTags().stream()
+                .sorted(Comparator.comparing(tag -> tag.tagName))
+                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+    }
+
+    /**
+     * Creates a {@code StudentCard} with the given {@code Student} and index to display.
+     */
+    public StudentCard(Student student, int displayedIndex, Floor floor, RoomNumber roomNumber) {
+        super(FXML);
+        this.student = student;
+        id.setText(displayedIndex + ". ");
+        name.setText(student.getName().fullName);
+        phone.setText(student.getPhone().value);
+        faculty.setText(student.getFaculty().value);
+        studentId.setText(student.getStudentId().value);
+        email.setText(student.getEmail().value);
+        this.floor.setText(floor.value);
+        this.roomNumber.setText(roomNumber.value);
         student.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));

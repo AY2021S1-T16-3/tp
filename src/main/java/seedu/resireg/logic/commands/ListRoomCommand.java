@@ -42,12 +42,12 @@ public class ListRoomCommand extends Command {
             break;
         }
         case VACANT: {
-            model.updateFilteredRoomList(Model.PREDICATE_SHOW_VACANT_ROOMS);
+            model.updateFilteredRoomList(room -> !model.isAllocated(room));
             message = MESSAGE_VACANT_SUCCESS;
             break;
         }
         case ALLOCATED: {
-            model.updateFilteredRoomList(Model.PREDICATE_SHOW_ALLOCATED_ROOMS);
+            model.updateFilteredRoomList(model::isAllocated);
             message = MESSAGE_ALLOCATED_SUCCESS;
             break;
         }

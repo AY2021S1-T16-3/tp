@@ -38,11 +38,8 @@ public class CreateEditCopy {
         StudentId copiedStudentId = studentToCopy.getStudentId();
         Set<Tag> copiedTags = studentToCopy.getTags();
 
-        Student copy = new Student(copiedName, copiedPhone,
+        return new Student(copiedName, copiedPhone,
                 copiedEmail, copiedFaculty, copiedStudentId, copiedTags);
-        copy.setRoom(studentToCopy.getRoom());
-
-        return copy;
     }
 
     /**
@@ -61,9 +58,6 @@ public class CreateEditCopy {
         RoomType copiedRoomType = roomToCopy.getRoomType();
         Set<Tag> copiedTags = roomToCopy.getTags();
 
-        Room copy = new Room(copiedFloor, copiedRoomNumber, copiedRoomType, copiedTags);
-        copy.setStudent(roomToCopy.getStudent());
-
-        return copy;
+        return new Room(copiedFloor, copiedRoomNumber, copiedRoomType, copiedTags);
     }
 }

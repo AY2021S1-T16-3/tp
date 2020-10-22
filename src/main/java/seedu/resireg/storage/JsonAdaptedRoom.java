@@ -27,7 +27,6 @@ class JsonAdaptedRoom {
     private final String roomNumber;
     private final String roomType;
     private final List<JsonAdaptedTag> tagged = new ArrayList<>();
-    private JsonAdaptedRoomStudent student;
 
     /**
      * Constructs a {@code JsonAdaptedRoom} with the given room details.
@@ -35,16 +34,12 @@ class JsonAdaptedRoom {
     @JsonCreator
     public JsonAdaptedRoom(@JsonProperty("floor") String floor, @JsonProperty("roomNumber") String number,
                            @JsonProperty("roomType") String roomType,
-                           @JsonProperty("tagged") List<JsonAdaptedTag> tagged,
-                           @JsonProperty("student") JsonAdaptedRoomStudent student) {
+                           @JsonProperty("tagged") List<JsonAdaptedTag> tagged) {
         this.floor = floor;
         this.roomNumber = number;
         this.roomType = roomType;
         if (tagged != null) {
             this.tagged.addAll(tagged);
-        }
-        if (student != null) {
-            this.student = student;
         }
     }
 
@@ -58,9 +53,6 @@ class JsonAdaptedRoom {
         tagged.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
-        if (source.hasStudent()) {
-            this.student = new JsonAdaptedRoomStudent(source.getStudent());
-        }
     }
 
     /**
@@ -101,12 +93,7 @@ class JsonAdaptedRoom {
 
         final Set<Tag> modelTags = new HashSet<>(roomTags);
 
-        Room newRoom = new Room(modelFloor, modelNumber, modelRoomType, modelTags);
-        if (student != null) {
-            newRoom.setStudent(student.toModelType());
-        }
-        return newRoom;
+        return new Room(modelFloor, modelNumber, modelRoomType, modelTags);
     }
-
 }
 
