@@ -37,9 +37,6 @@ public class HelpCommand extends Command {
             // user guide
             + "You can also refer to our user guide at: https://ay2021s1-cs2103-t16-3.github.io/tp/UserGuide.html";
 
-    private static final Map<String, Help> commandWordToHelpMap =
-            new CommandMapper(new ArrayList<>()).getCommandWordToHelpMap();
-
     private String input;
 
     /**
@@ -54,6 +51,9 @@ public class HelpCommand extends Command {
 
     @Override
     public CommandResult execute(Model model, Storage storage, CommandHistory history) throws CommandException {
+         final Map<String, Help> commandWordToHelpMap =
+            new CommandMapper(model.getCommandWordAliases()).getCommandWordToHelpMap();
+
         if (input.isBlank()) {
             return new CommandResult(MESSAGE_GENERAL_HELP);
         } else if (commandWordToHelpMap.containsKey(input)) { // print full help message for specific command
