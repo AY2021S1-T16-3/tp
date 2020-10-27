@@ -51,7 +51,7 @@ public class HelpCommand extends Command {
 
     @Override
     public CommandResult execute(Model model, Storage storage, CommandHistory history) throws CommandException {
-         final Map<String, Help> commandWordToHelpMap =
+        final Map<String, Help> commandWordToHelpMap =
             new CommandMapper(model.getCommandWordAliases()).getCommandWordToHelpMap();
 
         if (input.isBlank()) {
