@@ -65,7 +65,10 @@ public enum CommandWordEnum {
     // allocations
     ALLOCATE_COMMAND(AllocateCommand.COMMAND_WORD, AllocateCommand.HELP, new AllocateCommandParser()::parse),
     DEALLOCATE_COMMAND(DeallocateCommand.COMMAND_WORD, DeallocateCommand.HELP, new DeallocateCommandParser()::parse),
-    REALLOCATE_COMMAND(ReallocateCommand.COMMAND_WORD, ReallocateCommand.HELP, new ReallocateCommandParser()::parse);
+    REALLOCATE_COMMAND(ReallocateCommand.COMMAND_WORD, ReallocateCommand.HELP, new ReallocateCommandParser()::parse),
+
+    // tutorial
+    TUTORIAL_COMMAND(TutorialCommand.COMMAND_WORD, TutorialCommand.HELP, args -> new TutorialCommand());
 
     private String commandWord;
     private Parser<Command> commandParser;
