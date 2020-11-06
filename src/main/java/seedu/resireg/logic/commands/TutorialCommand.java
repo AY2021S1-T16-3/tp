@@ -1,5 +1,6 @@
 package seedu.resireg.logic.commands;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 import seedu.resireg.commons.core.LogsCenter;
@@ -23,11 +24,10 @@ public class TutorialCommand extends Command {
         logger.info("Executing tutorial command...");
 
         try {
-            String path = getClass().getResource(TUTORIAL_VIDEO_PATH).toURI().toString();
-            // Works on Linux only, and requires xdg-open
+            var path = new File(getClass().getResource(TUTORIAL_VIDEO_PATH).toURI()).getCanonicalPath();
             String operatingSystem = System.getProperty("os.name");
             if (operatingSystem.startsWith("Windows")) {
-                Runtime.getRuntime().exec('\"' + path + '\"');
+                Runtime.getRuntime().exec("powershell.exe -Command Invoke-Item '" + path + "'");
             } else if (operatingSystem.startsWith("darwin") || operatingSystem.startsWith("mac")) {
                 Runtime.getRuntime().exec("open " + path);
             } else { // assume linux, and xdg-open present
