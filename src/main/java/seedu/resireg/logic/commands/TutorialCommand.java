@@ -28,7 +28,8 @@ public class TutorialCommand extends Command {
             String operatingSystem = System.getProperty("os.name");
             if (operatingSystem.startsWith("Windows")) {
                 Runtime.getRuntime().exec("powershell.exe -Command Invoke-Item '" + path + "'");
-            } else if (operatingSystem.startsWith("darwin") || operatingSystem.startsWith("mac")) {
+            } else if (operatingSystem.startsWith("darwin") || operatingSystem.startsWith("mac")
+                    || operatingSystem.startsWith("Mac") || operatingSystem.startsWith("mAC")) {
                 Runtime.getRuntime().exec("open " + path);
             } else { // assume linux, and xdg-open present
                 Runtime.getRuntime().exec("xdg-open " + path);
