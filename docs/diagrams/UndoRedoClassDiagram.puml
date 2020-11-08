@@ -21,9 +21,9 @@ ModelManager *--> "1" StatefulResiReg
 
 class UndoCommand LOGIC_COLOR
 UndoCommand .left[#blue].> ModelManager
-UndoCommand .up[#blue].|> Command
+UndoCommand -up[#blue]-|> Command
 
 class RedoCommand LOGIC_COLOR
 RedoCommand .left[#blue].> ModelManager
-RedoCommand .up[#blue].|> Command
+RedoCommand -up[#blue]-|> Command
 @enduml
