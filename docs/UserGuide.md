@@ -403,7 +403,7 @@ clear: Clears list of students.
 You can also refer to our user guide at: https://ay2021s1-cs2103-t16-3.github.io/tp/UserGuide.html
 ```
 
-#### Checking the syntax for a command
+#### Checking the syntax for a command: `help`
 
 Shows the purpose, syntax, and parameters of a command if you need to use the command but are unsure of its syntax.
 
@@ -425,6 +425,9 @@ Clears all entries (students, rooms, allocations and bin items) from ResiReg.
 
 Format: `clear`
 - Additional arguments passed to the command are ignored.
+
+<div markdown="span" class="alert alert-info">:information_source: Students and rooms deleted using `clear` will <b>not</b> be sent to the bin, since this command is designed to let you start using ResiReg on a clean slate. Use with care!
+</div>
 
 #### Undo previous command : `undo`
 Restores the address book to the previous state where a modifying command was executed.
